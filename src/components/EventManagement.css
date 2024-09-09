@@ -1,0 +1,160 @@
+/* Basic styling for the Event Management component */
+.container {
+  margin-top: 20px;
+  background-color: #d3d3d3; /* Light shiny grey background */
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease-in-out;
+}
+
+h2 {
+  margin-bottom: 20px;
+  font-size: 24px;
+  color: #333;
+}
+
+form {
+  margin-bottom: 20px;
+}
+
+button {
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+.list-group-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.list-group-item button {
+  margin-left: 10px;
+}
+
+/* Media Queries for responsiveness */
+@media (max-width: 1200px) {
+  .container {
+    padding: 18px;
+  }
+
+  h2 {
+    font-size: 22px;
+  }
+
+  button {
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 1000px) {
+  .container {
+    padding: 16px;
+  }
+
+  h2 {
+    font-size: 20px;
+  }
+
+  button {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 920px) {
+  .container {
+    padding: 14px;
+  }
+
+  h2 {
+    font-size: 18px;
+  }
+
+  button {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 880px) {
+  .container {
+    padding: 12px;
+  }
+
+  h2 {
+    font-size: 17px;
+  }
+
+  button {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 740px) {
+  .container {
+    padding: 10px;
+  }
+
+  h2 {
+    font-size: 16px;
+  }
+
+  button {
+    font-size: 11px;
+  }
+}
+
+@media (max-width: 600px) {
+  .container {
+    padding: 8px;
+  }
+
+  h2 {
+    font-size: 15px;
+  }
+
+  button {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  .container {
+    padding: 6px;
+  }
+
+  h2 {
+    font-size: 14px;
+  }
+
+  button {
+    font-size: 9px;
+  }
+}
+
+@media (max-width: 320px) {
+  .container {
+    padding: 4px;
+  }
+
+  h2 {
+    font-size: 12px;
+  }
+
+  button {
+    font-size: 8px;
+  }
+}

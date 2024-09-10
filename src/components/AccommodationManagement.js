@@ -1,31 +1,55 @@
 import React, { useState, useEffect } from 'react';
-import { Container, Table } from 'react-bootstrap';
-import { firestore } from '../firebaseconfig'; // Import Firestore instance correctly
+import { Container, Table, Button } from 'react-bootstrap';
+import { firestore } from '../firebaseconfig'; // Firebase Firestore configuration
 import { collection, getDocs } from 'firebase/firestore';
+import emailjs from 'emailjs-com'; // EmailJS for sending confirmation emails
 
 const AccommodationManagement = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  // Fetch bookings from Firebase Firestore
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        const bookingsCollection = collection(firestore, 'bookings'); // Use 'firestore' here
+        // Reference to the 'bookings' collection in Firestore
+        const bookingsCollection = collection(firestore, 'bookings');
         const bookingSnapshot = await getDocs(bookingsCollection);
         const bookingList = bookingSnapshot.docs.map((doc) => ({
           id: doc.id,
           ...doc.data(),
         }));
-        setBookings(bookingList);
+        setBookings(bookingList); // Set the bookings state with the data
       } catch (error) {
         console.error('Error fetching bookings:', error);
       } finally {
-        setLoading(false);
+        setLoading(false); // Stop loading once data is fetched
       }
     };
 
-    fetchBookings();
+    fetchBookings(); // Call the function to fetch bookings on component mount
   }, []);
+
+  // Function to send confirmation email using EmailJS
+  const sendConfirmationEmail = (booking) => {
+    const templateParams = {
+      user_id: booking.id,
+      name: booking.name,
+      surname: booking.surname,
+      room_number: booking.roomNumber,
+      email: booking.email,
+      contact: booking.contact,
+    };
+
+    emailjs
+      .send('YOUR_SERVICE_ID', 'YOUR_TEMPLATE_ID', templateParams, 'YOUR_USER_ID')
+      .then((response) => {
+        console.log('Email sent successfully', response);
+      })
+      .catch((error) => {
+        console.error('Error sending email:', error);
+      });
+  };
 
   if (loading) {
     return (
@@ -35,83 +59,38 @@ const AccommodationManagement = () => {
     );
   }
 
-  const formatDate = (timestamp) => {
-    return timestamp ? new Date(timestamp.toDate()).toLocaleDateString() : '';
-  };
-
   return (
     <Container className="mt-5">
       <h2 className="text-center">Accommodation Management</h2>
 
-      <h3 className="mt-4">Successful Bookings</h3>
-      <Table striped bordered hover>
+      <Table striped bordered hover className="mt-4">
         <thead>
           <tr>
-            <th>ID</th>
+            <th>User ID</th>
             <th>Name</th>
+            <th>Surname</th>
+            <th>Room Number</th>
             <th>Email</th>
-            <th>Accommodation ID</th>
-            <th>Check-in Date</th>
-            <th>Check-out Date</th>
-            <th>Total Amount</th>
-            <th>Adults</th>
-            <th>Children</th>
-            <th>Status</th>
+            <th>Contact</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {bookings
-            .filter((booking) => booking.status === 'successful')
-            .map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.id}</td>
-                <td>{booking.name}</td>
-                <td>{booking.email}</td>
-                <td>{booking.accommodationId}</td>
-                <td>{formatDate(booking.checkInDate)}</td>
-                <td>{formatDate(booking.checkOutDate)}</td>
-                <td>${booking.totalAmount}</td>
-                <td>{booking.adults}</td>
-                <td>{booking.children}</td>
-                <td>{booking.status}</td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
-
-      <h3 className="mt-4">Unsuccessful Bookings</h3>
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Accommodation ID</th>
-            <th>Check-in Date</th>
-            <th>Check-out Date</th>
-            <th>Total Amount</th>
-            <th>Adults</th>
-            <th>Children</th>
-            <th>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {bookings
-            .filter((booking) => booking.status === 'unsuccessful')
-            .map((booking) => (
-              <tr key={booking.id}>
-                <td>{booking.id}</td>
-                <td>{booking.name}</td>
-                <td>{booking.email}</td>
-                <td>{booking.accommodationId}</td>
-                <td>{formatDate(booking.checkInDate)}</td>
-                <td>{formatDate(booking.checkOutDate)}</td>
-                <td>${booking.totalAmount}</td>
-                <td>{booking.adults}</td>
-                <td>{booking.children}</td>
-                <td>{booking.status}</td>
-              </tr>
-            ))}
+          {bookings.map((booking) => (
+            <tr key={booking.id}>
+              <td>{booking.id}</td>
+              <td>{booking.name}</td>
+              <td>{booking.surname}</td>
+              <td>{booking.roomNumber}</td>
+              <td>{booking.email}</td>
+              <td>{booking.contact}</td>
+              <td>
+                <Button onClick={() => sendConfirmationEmail(booking)}>
+                  Confirm
+                </Button>
+              </td>
+            </tr>
+          ))}
         </tbody>
       </Table>
     </Container>
@@ -119,3 +98,6 @@ const AccommodationManagement = () => {
 };
 
 export default AccommodationManagement;
+
+
+

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { auth } from '../firebaseconfig'; // Adjusted import to use firebaseconfig
-import { RecaptchaVerifier, signInWithPhoneNumber, PhoneAuthProvider } from 'firebase/auth'; // Import necessary functions from firebase/auth
+import { auth } from '../firebaseconfig'; // Ensure correct import
+import { RecaptchaVerifier, signInWithPhoneNumber, PhoneAuthProvider, signInWithCredential } from 'firebase/auth';
 
 function SmsManagement() {
   const [phoneNumber, setPhoneNumber] = useState('');
@@ -8,19 +8,25 @@ function SmsManagement() {
   const [verificationId, setVerificationId] = useState('');
 
   useEffect(() => {
-    setupRecaptcha();
+    if (!window.recaptchaVerifier) {
+      setupRecaptcha();
+    }
   }, []);
 
   const setupRecaptcha = () => {
-    window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
-      size: 'invisible',
-      callback: (response) => {
-        console.log('reCAPTCHA resolved');
-      },
-      'expired-callback': () => {
-        console.log('reCAPTCHA expired');
-      }
-    }, auth);
+    try {
+      window.recaptchaVerifier = new RecaptchaVerifier('recaptcha-container', {
+        size: 'invisible',
+        callback: (response) => {
+          console.log('reCAPTCHA resolved');
+        },
+        'expired-callback': () => {
+          console.log('reCAPTCHA expired');
+        }
+      }, auth);
+    } catch (error) {
+      console.error('Error setting up reCAPTCHA:', error);
+    }
   };
 
   const handleSendCode = async () => {
@@ -30,6 +36,7 @@ function SmsManagement() {
       setVerificationId(confirmationResult.verificationId);
       alert('Verification code sent!');
     } catch (error) {
+      console.error('Error sending verification code:', error);
       alert('Error sending verification code: ' + error.message);
     }
   };
@@ -37,9 +44,10 @@ function SmsManagement() {
   const handleVerifyCode = async () => {
     try {
       const credential = PhoneAuthProvider.credential(verificationId, verificationCode);
-      await auth.signInWithCredential(credential);
+      await signInWithCredential(auth, credential);
       alert('Phone number verified!');
     } catch (error) {
+      console.error('Error verifying code:', error);
       alert('Error verifying code: ' + error.message);
     }
   };
@@ -67,3 +75,4 @@ function SmsManagement() {
 }
 
 export default SmsManagement;
+

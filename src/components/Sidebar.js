@@ -2,19 +2,19 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEnvelope, faSms } from '@fortawesome/free-solid-svg-icons';
-import { signOut } from 'firebase/auth'; // Import the signOut function
-import { auth } from '../firebaseconfig'; // Import your Firebase auth configuration
-import './Sidebar.css'; // Ensure your CSS file is included
+import { signOut } from 'firebase/auth';
+import { auth } from '../firebaseconfig';
+import './Sidebar.css';
 
 const Sidebar = () => {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
     try {
-      await signOut(auth); // Sign out the user
-      navigate('/login'); // Navigate to the login page after signing out
+      await signOut(auth);
+      navigate('/login');
     } catch (error) {
-      console.error('Error signing out:', error); // Handle any errors during sign-out
+      console.error('Error signing out:', error);
     }
   };
 
@@ -39,7 +39,7 @@ const Sidebar = () => {
       <button onClick={() => navigate('/usermanagement')} className="sidebar-button">User Management</button>
       <button onClick={() => navigate('/accommodationmanagement')} className="sidebar-button">Accommodation Management</button>
       <button onClick={() => navigate('/aboutpagemanagement')} className="sidebar-button">About Page Management</button>
-      <button onClick={handleLogout} className="sidebar-button">Logout</button> {/* Logout button */}
+      <button onClick={handleLogout} className="sidebar-button">Logout</button>
     </div>
   );
 };

@@ -1,62 +1,43 @@
-/* src/components/Sidebar.css */
 .sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
   width: 250px;
-  height: 100%;
-  background-color: #003366; /* Dark blue background */
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding-top: 20px;
-  transition: width 0.3s;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .icon-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
+  justify-content: space-around;
+  width: 100%;
   margin-bottom: 20px;
 }
 
 .sidebar-icon {
-  color: white;
-  font-size: 24px;
-  margin: 15px 0;
+  font-size: 20px;
   cursor: pointer;
-  transition: color 0.3s;
 }
 
 .sidebar-icon:hover {
-  color: #007bff;
+  color: #aaa;
 }
 
 .sidebar-button {
-  background-color: grey;
-  color: white;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background-color: #444;
+  color: #fff;
   border: none;
-  padding: 10px 20px;
-  margin: 10px 0;
-  width: 80%;
-  text-align: center;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
+  text-align: left;
 }
 
 .sidebar-button:hover {
   background-color: #555;
-}
-
-.main-container {
-  display: flex;
-  margin-left: 250px;
-}
-
-.content {
-  flex: 1;
-  padding: 20px;
 }
 
 /* Media Queries for different screen sizes */

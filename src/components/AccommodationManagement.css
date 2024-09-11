@@ -1,0 +1,96 @@
+/* AccommodationManagement.css */
+
+/* Basic Table Styling */
+.custom-table {
+  background-color: #f8f9fa; /* Light background */
+  border: 1px solid #dee2e6; /* Border color */
+  font-size: 0.95rem; /* Slightly smaller font for compactness */
+  width: 100%; /* Ensure table uses full container width */
+  margin-bottom: 1rem; /* Space below the table */
+}
+
+/* Table Header Styling */
+.custom-table thead th {
+  background-color: #343a40; /* Dark background for header */
+  color: white;
+  font-weight: bold;
+  text-align: center;
+}
+
+/* Table Body Styling */
+.custom-table tbody td {
+  text-align: center; /* Center the content of the table */
+  padding: 12px 8px; /* Add padding for better spacing */
+}
+
+/* Zebra Stripe Rows */
+.custom-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2; /* Alternating row colors */
+}
+
+/* Headings */
+h2 {
+  font-family: 'Arial', sans-serif;
+  color: #343a40;
+  margin: 0; /* Remove default margin for headings */
+}
+
+/* Button Styling */
+button {
+  font-size: 0.85rem; /* Slightly smaller font for buttons */
+  margin: 0.2rem; /* Small margin around buttons */
+  padding: 0.5rem 1rem; /* Padding for button size */
+}
+
+/* Margin Utilities */
+.mt-5 {
+  margin-top: 50px; /* Margin for top spacing */
+}
+
+.mb-4 {
+  margin-bottom: 30px; /* Margin for bottom spacing */
+}
+
+.text-center {
+  text-align: center; /* Center text alignment */
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 767.98px) {
+  .custom-table {
+    font-size: 0.85rem; /* Smaller font on mobile */
+  }
+
+  button {
+    font-size: 0.75rem; /* Smaller font size for buttons on mobile */
+    padding: 0.4rem 0.8rem; /* Adjust padding for smaller buttons */
+  }
+
+  .custom-table tbody td,
+  .custom-table thead th {
+    padding: 8px 4px; /* Reduced padding for smaller screens */
+  }
+}
+
+/* Medium Devices (tablets) */
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .custom-table {
+    font-size: 0.9rem; /* Slightly smaller font for medium screens */
+  }
+
+  button {
+    font-size: 0.8rem; /* Slightly smaller font size for buttons on tablets */
+    padding: 0.45rem 0.9rem; /* Adjust padding for buttons on tablets */
+  }
+}
+
+/* Large Devices (desktops) */
+@media (min-width: 992px) {
+  .custom-table {
+    font-size: 0.95rem; /* Standard font size for larger screens */
+  }
+
+  button {
+    font-size: 0.85rem; /* Standard button font size for larger screens */
+  }
+}

@@ -1,53 +1,68 @@
-/* src/styles/PaymentManagement.css */
-
-.payment-management {
-    padding: 20px;
-    background-color: #f9f9f9;
-    border-radius: 8px;
-    max-width: 800px;
-    margin: auto;
+/* Base Styles */
+div {
+  padding: 20px;
+  font-family: Arial, sans-serif;
 }
 
-.payment-management h2 {
-    text-align: center;
-    margin-bottom: 20px;
+h2 {
+  color: #343a40;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
-.payment-list {
-    list-style: none;
-    padding: 0;
-    margin: 0 0 20px 0;
+p {
+  color: red;
+  text-align: center;
+  font-weight: bold;
 }
 
-.payment-list li {
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 0 auto;
+}
+
+thead {
+  background-color: #343a40;
+  color: white;
+}
+
+th, td {
+  padding: 12px;
+  border: 1px solid #dee2e6;
+  text-align: center;
+}
+
+thead th {
+  font-weight: bold;
+}
+
+tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tbody tr:hover {
+  background-color: #e9ecef;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+  table {
+    font-size: 0.85rem;
+  }
+
+  th, td {
     padding: 10px;
-    margin-bottom: 10px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background-color: #fff;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
+  }
 }
 
-.payment-details input,
-.payment-details textarea {
-    width: 100%;
+@media (max-width: 480px) {
+  table {
+    font-size: 0.75rem;
+  }
+
+  th, td {
     padding: 8px;
-    margin: 5px 0;
-    border-radius: 4px;
-    border: 1px solid #ccc;
-}
-
-.payment-details button {
-    background-color: #28a745;
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.payment-details button:hover {
-    background-color: #218838;
+  }
 }

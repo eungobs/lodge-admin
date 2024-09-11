@@ -10,7 +10,7 @@ function Dashboard() {
     datasets: [
       {
         label: 'Daily Statistics',
-        data: [12, 7, 3], // Example data, replace with your actual data
+        data: [12, 7, 3],
         backgroundColor: [
           'rgba(75, 192, 192, 0.2)',
           'rgba(153, 102, 255, 0.2)',
@@ -43,6 +43,15 @@ function Dashboard() {
 }
 
 export default Dashboard;
+
+
+
+
+
+
+
+
+
 
 
 

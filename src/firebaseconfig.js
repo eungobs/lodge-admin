@@ -1,10 +1,10 @@
-// Import the functions you need from the SDKs you need
+// Import the required functions from the Firebase SDKs
 import { initializeApp } from 'firebase/app';
 import { getFirestore } from 'firebase/firestore';
 import { getStorage } from 'firebase/storage';
-import { getAuth } from 'firebase/auth'; // Import Firebase Authentication
+import { getAuth } from 'firebase/auth'; // Firebase Authentication
 
-// Your web app's Firebase configuration
+// Firebase configuration for your web app
 const firebaseConfig = {
   apiKey: 'AIzaSyBgPxKTtYKIqADa6IYRQRJTWNcLGFQjCRI',
   authDomain: 'sunset-heaven-lodge.firebaseapp.com',
@@ -15,16 +15,13 @@ const firebaseConfig = {
   measurementId: 'G-BWHSRZB1YD',
 };
 
-// Initialize Firebase
+// Initialize Firebase app with the configuration
 const app = initializeApp(firebaseConfig);
 
-// Initialize Firestore, Storage, and Authentication
+// Initialize Firestore, Storage, and Authentication services
 const firestore = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app); // Initialize Authentication
 
-// Export the instances
+// Export initialized Firebase services for use in other parts of the app
 export { firestore, storage, auth };
-
-
-

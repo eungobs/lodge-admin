@@ -10,7 +10,7 @@ import PaymentManagement from './components/PaymentManagement';
 import UserManagement from './components/UserManagement';
 import AccommodationManagement from './components/AccommodationManagement';
 import AboutPageManagement from './components/AboutPageManagement';
-import Dashboard from './components/Dashboard'; // Import Dashboard
+import Dashboard from './components/Dashboard';
 
 function App() {
   return (

@@ -1,22 +1,26 @@
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
-const cors = require('cors')({ origin: true });
+const cors = require('cors');
+const express = require('express');
+const app = express();
 
-admin.initializeApp();
+// Enable CORS
+app.use(cors({ origin: true })); // You can specify your frontend URL here if needed
 
-exports.sendEmail = functions.https.onRequest((req, res) => {
-  cors(req, res, () => {
-    // Your email sending logic here
-    const { email, type, message } = req.body;
+app.use(express.json()); // To parse JSON request bodies
 
-    // Make sure to handle POST requests
-    if (req.method !== 'POST') {
-      return res.status(405).send('Method Not Allowed');
-    }
+// Your sendEmail function
+app.post('/sendEmail', (req, res) => {
+  const { email, emailType, message } = req.body;
 
-    // Proceed with email sending logic...
+  // Replace this comment with your email sending logic
+  console.log('Email:', email);
+  console.log('Email Type:', emailType);
+  console.log('Message:', message);
 
-    res.status(200).send('Email sent successfully!');
-  });
+  // Simulate successful email sending
+  res.status(200).send('Email sent successfully!');
 });
+
+// Export the function
+exports.sendEmail = functions.https.onRequest(app);
 

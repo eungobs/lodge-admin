@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { useNavigate } from 'react-router-dom';
-import { auth } from '../firebaseConfig'; // Ensure this path is correct
+import { auth } from '../firebaseConfig'; // Ensure this path to firebaseConfig is correct
+import '../styles/Login.css'; // Optional CSS for styling the login form
 
 const Login = () => {
   const [email, setEmail] = useState('');

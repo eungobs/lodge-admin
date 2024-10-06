@@ -1,37 +1,25 @@
 // src/auth.js
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js';
+import { getAuth, signInWithEmailAndPassword } from 'https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js';
 
-import { auth } from './firebaseConfig'; // Ensure the correct path
-import { signInWithEmailAndPassword } from "firebase/auth";
+const firebaseConfig = {
+  apiKey: 'AIzaSyBgPxKTtYKIqADa6IYRQRJTWNcLGFQjCRI',
+  authDomain: 'sunset-heaven-lodge.firebaseapp.com',
+  projectId: 'sunset-heaven-lodge',
+  storageBucket: 'sunset-heaven-lodge.appspot.com',
+  messagingSenderId: '962621175424',
+  appId: '1:962621175424:web:08cec9632036b7a6285865',
+  measurementId: 'G-BWHSRZB1YD',
+};
 
-// Sign In Function
-async function signInUser(email, password) {
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+export const login = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
-    console.log('User signed in:', user);
-    return user;
+    return userCredential.user;
   } catch (error) {
-    console.error('Error signing in:', error);
-    throw error; // Rethrow the error for handling in the calling function
+    throw new Error(error.message);
   }
-}
-
-// Get ID Token Function
-async function getIdToken() {
-  const user = auth.currentUser;
-  if (user) {
-    try {
-      const idToken = await user.getIdToken();
-      console.log('ID Token:', idToken);
-      return idToken;
-    } catch (error) {
-      console.error('Error fetching ID token:', error);
-    }
-  } else {
-    console.log('No user is signed in.');
-    return null;
-  }
-}
-
-// Export functions for use in other components
-export { signInUser, getIdToken };
+};

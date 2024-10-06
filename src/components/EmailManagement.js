@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import React, { useState, useEffect } from 'react';
+import { auth } from '../firebaseConfig';
 
 const EmailManagement = () => {
   const [email, setEmail] = useState('');
@@ -7,15 +7,43 @@ const EmailManagement = () => {
   const [message, setMessage] = useState('');
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false); // New state for loading
+  const [user, setUser] = useState(null); // State for user authentication
+
+  useEffect(() => {
+    const unsubscribe = auth.onAuthStateChanged((currentUser) => {
+      setUser(currentUser); // Set the current user
+    });
+    return () => unsubscribe(); // Cleanup subscription
+  }, []);
 
   const handleSendEmail = async () => {
+    if (!user) {
+      setError('You must be logged in to send emails.');
+      return;
+    }
+    
     setLoading(true); // Start loading
     try {
-      const functions = getFunctions();
-      const sendEmail = httpsCallable(functions, 'sendEmail');
-      await sendEmail({ email, type: emailType, message });
+      // Send email via Firebase Cloud Function
+      const response = await fetch('https://us-central1-sunset-heaven-lodge.cloudfunctions.net/sendEmail', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          emailType,
+          message,
+        }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error('Error sending email: ' + errorData.message);
+      }
+
       alert('Email sent successfully!');
-      // Reset the form fields if needed
+      // Reset the form fields
       setEmail('');
       setEmailType('confirmation');
       setMessage('');
@@ -63,4 +91,3 @@ const EmailManagement = () => {
 };
 
 export default EmailManagement;
-

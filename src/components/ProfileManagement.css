@@ -1,46 +1,48 @@
-/* src/components/ProfileManagement.css */
+/* ProfileManagement.css */
 .profile-management {
   padding: 20px;
-  background-color: #f0f0f0;
-  min-height: 100vh;
 }
 
 .card-container {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  justify-content: center;
 }
 
 .user-card {
-  background-color: white;
-  border: 1px solid #ddd;
-  border-radius: 8px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
   padding: 15px;
-  width: 250px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.user-card h3 {
-  margin: 0;
-  font-size: 20px;
+  width: 250px; /* Fixed width for cards */
 }
 
 .user-card p {
-  margin: 5px 0;
+  display: flex;
+  align-items: center;
 }
 
-.user-card button {
+.booking-status {
   margin-top: 10px;
+  background-color: #f9f9f9;
   padding: 10px;
-  background-color: #ff4d4d;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+button {
+  background-color: #007bff;
   color: white;
   border: none;
+  padding: 10px;
   border-radius: 5px;
   cursor: pointer;
 }
 
-.user-card button:disabled {
+button:hover {
+  background-color: #0056b3;
+}
+
+button[disabled] {
   background-color: #ccc;
   cursor: not-allowed;
 }

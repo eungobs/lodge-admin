@@ -76,9 +76,13 @@ const AccommodationList = () => {
               <div>
                 <h4>Utilities:</h4>
                 <ul>
-                  {Object.entries(acc.utilities).map(([key, value]) => (
-                    value && <li key={key}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</li>
-                  ))}
+                  {acc.utilities ? (
+                    Object.entries(acc.utilities).map(([key, value]) => (
+                      value && <li key={key}>{key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}</li>
+                    ))
+                  ) : (
+                    <li>No utilities available.</li>
+                  )}
                 </ul>
               </div>
             </div>

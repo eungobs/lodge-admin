@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getFirestore, collection, getDocs } from 'firebase/firestore';
+import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -36,6 +36,25 @@ const BookingManagement = () => {
     setSelectedBooking(null);
   };
 
+  const updateBookingStatus = async (bookingId, newStatus) => {
+    try {
+      const db = getFirestore();
+      const bookingDocRef = doc(db, 'bookings', bookingId);
+      await updateDoc(bookingDocRef, { status: newStatus });
+
+      // Update state to reflect changes locally
+      setBookings((prevBookings) =>
+        prevBookings.map((booking) =>
+          booking.id === bookingId ? { ...booking, status: newStatus } : booking
+        )
+      );
+
+      setSelectedBooking(null); // Close the modal after updating
+    } catch (err) {
+      console.error('Error updating booking status: ', err);
+    }
+  };
+
   if (loading) return <p>Loading bookings...</p>;
   if (error) return <p style={{ color: 'red' }}>{error}</p>;
 
@@ -53,7 +72,7 @@ const BookingManagement = () => {
           </div>
         ))}
       </div>
-      
+
       {selectedBooking && (
         <div style={modalOverlayStyle}>
           <div style={modalStyle}>
@@ -68,6 +87,24 @@ const BookingManagement = () => {
             <p><strong>Room Price:</strong> ${selectedBooking.roomPrice}</p>
             <p><strong>Payment Method:</strong> {selectedBooking.paymentMethod}</p>
             <p><strong>Date of Booking:</strong> {selectedBooking.bookingDate}</p>
+            <p><strong>Status:</strong> {selectedBooking.status}</p>
+
+            {/* Approve and Decline buttons */}
+            <div style={{ marginTop: '20px' }}>
+              <button
+                style={{ ...buttonStyle, backgroundColor: '#28a745', marginRight: '10px' }}
+                onClick={() => updateBookingStatus(selectedBooking.id, 'Approved')}
+              >
+                Approve
+              </button>
+              <button
+                style={{ ...buttonStyle, backgroundColor: '#dc3545' }}
+                onClick={() => updateBookingStatus(selectedBooking.id, 'Declined')}
+              >
+                Decline
+              </button>
+            </div>
+
             <button onClick={closeModal} style={closeButtonStyle}>Close</button>
           </div>
         </div>

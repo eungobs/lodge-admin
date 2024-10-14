@@ -16,8 +16,8 @@ Admin Authentication
 To access the CMS, administrators need to log in using the provided credentials.
 
 CMS Login Credentials:
-Email: eungo@gmail.com
-Password: 123456
+Email: lodge@gmail.com
+Password: 111111
 How to Use
 Login:
 Enter the provided credentials to log in and access the admin panel.

@@ -3,6 +3,9 @@
   flex-wrap: wrap; /* Allow items to wrap to the next line */
   justify-content: center; /* Center items in the container */
   padding: 20px;
+  background-color: #f9f9f9; /* Light background for contrast */
+  border-radius: 10px; /* Rounded corners for the list */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
 }
 
 .accommodation-list h1 {
@@ -11,22 +14,24 @@
   margin-bottom: 20px; /* Space below the heading */
   text-align: center; /* Center the heading */
   width: 100%; /* Ensure heading takes full width */
+  font-family: 'Arial', sans-serif; /* Modern font for the heading */
 }
 
 .accommodation-card {
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: 1px solid #e0e0e0; /* Lighter border for a softer look */
+  border-radius: 12px; /* More rounded corners */
   padding: 16px;
   margin: 10px;
   width: calc(30% - 20px); /* Adjust width for three cards per row */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow for depth */
   text-align: center;
-  transition: transform 0.2s; /* Add transition for hover effect */
-  background-color: #fff; /* Added background color for better contrast */
+  transition: transform 0.2s, box-shadow 0.2s; /* Add transition for hover effect */
+  background-color: #ffffff; /* Added background color for better contrast */
 }
 
 .accommodation-card:hover {
-  transform: scale(1.05); /* Scale up on hover */
+  transform: translateY(-5px); /* Lift effect on hover */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); /* Deeper shadow on hover */
 }
 
 .image-container {
@@ -39,17 +44,34 @@
   width: 100px; /* Set a fixed width for uniformity */
   height: 75px; /* Maintain aspect ratio */
   object-fit: cover; /* Ensure images fit within bounds */
-  border-radius: 4px;
+  border-radius: 8px; /* More rounded corners for images */
   margin: 5px; /* Space between images */
   transition: transform 0.2s; /* Smooth zoom transition */
+  border: 2px solid #007bff; /* Border around images for emphasis */
 }
 
+.accommodation-image {
+  width: 100px;
+  height: 75px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin: 5px;
+  transition: transform 0.2s;
+  border: 2px solid #007bff;
+  cursor: pointer;
+}
+
+.accommodation-image.zoomed-out {
+  transform: scale(2); /* Adjust scale as needed for zoom out */
+}
 .accommodation-image:hover {
-  transform: scale(1.2); /* Zoom effect on hover */
+  transform: scale(1.1); /* Slight zoom effect on hover */
 }
 
 .card-details {
   margin: 10px 0; /* Space around details */
+  font-family: 'Arial', sans-serif; /* Consistent font for details */
+  color: #555; /* Softer color for text */
 }
 
 .card-buttons {
@@ -59,17 +81,18 @@
 }
 
 .card-buttons button {
-  padding: 8px 12px; /* Add padding to buttons */
+  padding: 10px 15px; /* Add padding to buttons */
   border: none;
-  border-radius: 4px;
+  border-radius: 5px;
   background-color: #007bff; /* Bootstrap primary color */
   color: white;
   cursor: pointer;
-  transition: background-color 0.2s; /* Add transition for hover effect */
+  transition: background-color 0.2s, transform 0.2s; /* Add transition for hover effect */
 }
 
 .card-buttons button:hover {
   background-color: #0056b3; /* Darker shade on hover */
+  transform: scale(1.05); /* Slight scale effect on hover */
 }
 
 /* Responsive styles */

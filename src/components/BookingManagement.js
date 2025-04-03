@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
+import styled from 'styled-components';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -28,6 +29,25 @@ const BookingManagement = () => {
     fetchBookings();
   }, []);
 
+  // Helper function to format date
+  const formatDate = (dateString) => {
+    if (!dateString) return 'N/A';
+    try {
+      // Check if it's a Firestore Timestamp
+      const date = dateString.seconds 
+        ? new Date(dateString.seconds * 1000) 
+        : new Date(dateString);
+      return date.toLocaleDateString('en-US', {
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric'
+      });
+    } catch (error) {
+      console.error('Error formatting date:', error);
+      return dateString;
+    }
+  };
+
   const handleViewDetails = (booking) => {
     setSelectedBooking(booking);
   };
@@ -42,122 +62,232 @@ const BookingManagement = () => {
       const bookingDocRef = doc(db, 'bookings', bookingId);
       await updateDoc(bookingDocRef, { status: newStatus });
 
-      // Update state to reflect changes locally
       setBookings((prevBookings) =>
         prevBookings.map((booking) =>
           booking.id === bookingId ? { ...booking, status: newStatus } : booking
         )
       );
 
-      setSelectedBooking(null); // Close the modal after updating
+      setSelectedBooking(null);
     } catch (err) {
       console.error('Error updating booking status: ', err);
     }
   };
 
-  if (loading) return <p>Loading bookings...</p>;
-  if (error) return <p style={{ color: 'red' }}>{error}</p>;
+  if (loading) return <LoadingContainer>Loading bookings...</LoadingContainer>;
+  if (error) return <ErrorMessage>{error}</ErrorMessage>;
 
   return (
-    <div style={{ padding: '20px' }}>
-      <h2>Booking Management</h2>
-      <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-        {bookings.map((booking) => (
-          <div key={booking.id} style={cardStyle}>
-            <h3>{booking.userName}</h3>
-            <p><strong>Check-in:</strong> {booking.checkInDate}</p>
-            <p><strong>Check-out:</strong> {booking.checkOutDate}</p>
-            <p><strong>Status:</strong> {booking.status}</p>
-            <button style={buttonStyle} onClick={() => handleViewDetails(booking)}>View Details</button>
-          </div>
-        ))}
-      </div>
+    <Container>
+      <Title>Booking Management</Title>
+      <BookingList>
+        {bookings.map((booking) => {
+          // Determine check-in and check-out dates
+          const checkInDate = booking.bookingDetails?.checkInDate || booking.checkInDate;
+          const checkOutDate = booking.bookingDetails?.checkOutDate || booking.checkOutDate;
+
+          return (
+            <BookingCard key={booking.id}>
+              <BookingName>{booking.userName || 'Unknown User'}</BookingName>
+              <BookingDetail><strong>Check-in:</strong> {formatDate(checkInDate)}</BookingDetail>
+              <BookingDetail><strong>Check-out:</strong> {formatDate(checkOutDate)}</BookingDetail>
+              <BookingDetail><strong>Status:</strong> {booking.status || 'Pending'}</BookingDetail>
+              <ViewDetailsButton onClick={() => handleViewDetails(booking)}>
+                View Details
+              </ViewDetailsButton>
+            </BookingCard>
+          );
+        })}
+      </BookingList>
 
       {selectedBooking && (
-        <div style={modalOverlayStyle}>
-          <div style={modalStyle}>
-            <h2>Booking Details</h2>
-            <p><strong>User ID:</strong> {selectedBooking.userId}</p>
-            <p><strong>User Name:</strong> {selectedBooking.userName}</p>
-            <p><strong>Email:</strong> {selectedBooking.email}</p>
-            <p><strong>Phone Number:</strong> {selectedBooking.phoneNumber}</p>
-            <p><strong>Address:</strong> {selectedBooking.address}</p>
-            <p><strong>Check-in Date:</strong> {selectedBooking.checkInDate}</p>
-            <p><strong>Check-out Date:</strong> {selectedBooking.checkOutDate}</p>
-            <p><strong>Room Price:</strong> ${selectedBooking.roomPrice}</p>
-            <p><strong>Payment Method:</strong> {selectedBooking.paymentMethod}</p>
-            <p><strong>Date of Booking:</strong> {selectedBooking.bookingDate}</p>
-            <p><strong>Status:</strong> {selectedBooking.status}</p>
+        <ModalOverlay>
+          <ModalContent>
+            <ModalTitle>Booking Details</ModalTitle>
+            <ModalDetail><strong>User ID:</strong> {selectedBooking.userId}</ModalDetail>
+            <ModalDetail><strong>User Name:</strong> {selectedBooking.userName}</ModalDetail>
+            <ModalDetail><strong>Email:</strong> {selectedBooking.email}</ModalDetail>
+            <ModalDetail><strong>Phone Number:</strong> {selectedBooking.phoneNumber}</ModalDetail>
+            <ModalDetail><strong>Address:</strong> {selectedBooking.address}</ModalDetail>
+            
+            <ModalDetail>
+              <strong>Check-in Date:</strong> {formatDate(
+                selectedBooking.bookingDetails?.checkInDate || 
+                selectedBooking.checkInDate
+              )}
+            </ModalDetail>
+            <ModalDetail>
+              <strong>Check-out Date:</strong> {formatDate(
+                selectedBooking.bookingDetails?.checkOutDate || 
+                selectedBooking.checkOutDate
+              )}
+            </ModalDetail>
+            
+            <ModalDetail><strong>Room Price:</strong> ${selectedBooking.roomPrice}</ModalDetail>
+            <ModalDetail><strong>Payment Method:</strong> {selectedBooking.paymentMethod}</ModalDetail>
+            <ModalDetail><strong>Date of Booking:</strong> {formatDate(selectedBooking.bookingDate)}</ModalDetail>
+            <ModalDetail><strong>Status:</strong> {selectedBooking.status}</ModalDetail>
 
-            {/* Approve and Decline buttons */}
-            <div style={{ marginTop: '20px' }}>
-              <button
-                style={{ ...buttonStyle, backgroundColor: '#28a745', marginRight: '10px' }}
-                onClick={() => updateBookingStatus(selectedBooking.id, 'Approved')}
-              >
+            <ModalActions>
+              <ApproveButton onClick={() => updateBookingStatus(selectedBooking.id, 'Approved')}>
                 Approve
-              </button>
-              <button
-                style={{ ...buttonStyle, backgroundColor: '#dc3545' }}
-                onClick={() => updateBookingStatus(selectedBooking.id, 'Declined')}
-              >
+              </ApproveButton>
+              <DeclineButton onClick={() => updateBookingStatus(selectedBooking.id, 'Declined')}>
                 Decline
-              </button>
-            </div>
+              </DeclineButton>
+            </ModalActions>
 
-            <button onClick={closeModal} style={closeButtonStyle}>Close</button>
-          </div>
-        </div>
+            <CloseButton onClick={closeModal}>Close</CloseButton>
+          </ModalContent>
+        </ModalOverlay>
       )}
-    </div>
+    </Container>
   );
 };
 
-const cardStyle = {
-  border: '1px solid #ccc',
-  borderRadius: '8px',
-  padding: '20px',
-  width: '200px',
-  boxShadow: '2px 2px 10px rgba(0,0,0,0.1)',
-};
+// Styled Components
+const Container = styled.div`
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+`;
 
-const buttonStyle = {
-  padding: '10px',
-  backgroundColor: '#007BFF',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-};
+const Title = styled.h2`
+  text-align: center;
+  margin-bottom: 20px;
+`;
 
-const modalOverlayStyle = {
-  position: 'fixed',
-  top: 0,
-  left: 0,
-  right: 0,
-  bottom: 0,
-  backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  zIndex: 1000,
-};
+const BookingList = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 20px;
+`;
 
-const modalStyle = {
-  background: 'white',
-  padding: '20px',
-  borderRadius: '8px',
-  width: '400px',
-  boxShadow: '0 2px 10px rgba(0,0,0,0.2)',
-};
+const BookingCard = styled.div`
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 15px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
 
-const closeButtonStyle = {
-  padding: '10px',
-  backgroundColor: '#FF6347',
-  color: 'white',
-  border: 'none',
-  borderRadius: '5px',
-  cursor: 'pointer',
-};
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
+
+const BookingName = styled.h3`
+  margin-bottom: 10px;
+  color: #333;
+`;
+
+const BookingDetail = styled.p`
+  margin-bottom: 5px;
+`;
+
+const ViewDetailsButton = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color:rgb(123, 153, 184);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color:rgb(115, 145, 176);
+  }
+`;
+
+const ModalOverlay = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+`;
+
+const ModalContent = styled.div`
+  background: white;
+  padding: 30px;
+  border-radius: 10px;
+  width: 500px;
+  max-width: 90%;
+  max-height: 90%;
+  overflow-y: auto;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+`;
+
+const ModalTitle = styled.h2`
+  margin-bottom: 20px;
+  text-align: center;
+`;
+
+const ModalDetail = styled.p`
+  margin-bottom: 10px;
+`;
+
+const ModalActions = styled.div`
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+`;
+
+const ApproveButton = styled.button`
+  padding: 10px 20px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #218838;
+  }
+`;
+
+const DeclineButton = styled.button`
+  padding: 10px 20px;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+
+  &:hover {
+    background-color: #c82333;
+  }
+`;
+
+const CloseButton = styled.button`
+  width: 100%;
+  padding: 10px;
+  background-color: #6c757d;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  margin-top: 15px;
+  cursor: pointer;
+`;
+
+const LoadingContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-size: 18px;
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
+`;
 
 export default BookingManagement;

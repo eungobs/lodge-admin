@@ -21,7 +21,11 @@ const ProfileManagement = () => {
 
   // Function to handle going back to admin dashboard
   const handleGoBack = () => {
-    navigate('/admin-dashboard');
+    navigate('/admin/dashboard', { 
+      state: { 
+        from: 'profile-management' 
+      } 
+    });
   };
 
   // Fetch users from Firestore
@@ -33,7 +37,13 @@ const ProfileManagement = () => {
           id: doc.id, 
           ...doc.data() 
         }));
-        setUsers(userData);
+        
+        // Sort users alphabetically by name
+        const sortedUsers = userData.sort((a, b) => 
+          `${a.name} ${a.surname}`.localeCompare(`${b.name} ${b.surname}`)
+        );
+        
+        setUsers(sortedUsers);
         setLoading(false);
       } catch (error) {
         console.error('Error fetching users:', error);
@@ -49,19 +59,22 @@ const ProfileManagement = () => {
   const toggleBlockUser = async (userId, isBlocked) => {
     try {
       // Optimistically update local state
-      setUsers(users.map(user => 
+      const updatedUsers = users.map(user => 
         user.id === userId 
           ? { ...user, blocked: !isBlocked } 
           : user
-      ));
+      );
+
+      // Update local state
+      setUsers(updatedUsers);
 
       // Update in Firestore
       const userRef = doc(db, 'users', userId);
       await updateDoc(userRef, { blocked: !isBlocked });
     } catch (error) {
       console.error('Error updating user status:', error);
-      // Revert local state if update fails
-      setUsers(users);
+      // Show error notification
+      alert('Failed to update user status');
     }
   };
 
@@ -80,7 +93,9 @@ const ProfileManagement = () => {
     return (
       <div className="error-container">
         <p>{error}</p>
-        <button onClick={handleGoBack}>Back to AdminDashboard </button>
+        <button onClick={handleGoBack} className="error-back-button">
+          Back to AdminDashboard
+        </button>
       </div>
     );
   }
@@ -102,6 +117,9 @@ const ProfileManagement = () => {
       {users.length === 0 ? (
         <div className="no-users-container">
           <p>No users found</p>
+          <button onClick={handleGoBack} className="back-to-admindashboard-btn">
+            Return to AdminDashboard
+          </button>
         </div>
       ) : (
         <div className="card-container">

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getFirestore, collection, getDocs, doc, updateDoc } from 'firebase/firestore';
-import styled from 'styled-components';
+import { styled } from 'styled-components';
 
 const BookingManagement = () => {
   const [bookings, setBookings] = useState([]);
@@ -187,7 +187,7 @@ const BookingDetail = styled.p`
 const ViewDetailsButton = styled.button`
   width: 100%;
   padding: 10px;
-  background-color:rgb(123, 153, 184);
+  background-color: #007bff;
   color: white;
   border: none;
   border-radius: 5px;
@@ -195,7 +195,7 @@ const ViewDetailsButton = styled.button`
   transition: background-color 0.3s ease;
 
   &:hover {
-    background-color:rgb(115, 145, 176);
+    background-color: #0056b3;
   }
 `;
 
